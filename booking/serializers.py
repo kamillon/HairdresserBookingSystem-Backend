@@ -25,11 +25,10 @@ class UslugaSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 class ReservationSerializer(serializers.ModelSerializer):
-    # get_employee = serializers.SerializerMethodField(User.objects.filter(is_employee=True))
 
     class Meta:
         model = Reservation
-        fields = ['id', 'klientID', 'salonID', 'uslugaID', 'data', 'godzina', 'is_active', 'get_employee']
+        fields = ['id', 'klientID', 'salonID', 'uslugaID', 'do_kogo', 'data', 'godzina', 'is_active']
 
 class OpeningHoursSerializer(serializers.ModelSerializer):
     class Meta:

@@ -3,29 +3,38 @@ from django.contrib.auth.models import AbstractUser
 from django.utils.translation import gettext_lazy as _
 
 class User(AbstractUser):
+    USER_TYPE = [
+        ("admin", "admin"),
+        ("user", "klient"),
+        ("employee", "pracownik"),
+        ("manager", "właścieciel salonu"),
+    ]
+
     email = models.EmailField(verbose_name='email', max_length=255, unique=True)
     phone = models.CharField(null=True, max_length=255)
     is_staff = models.BooleanField(null=True)
     is_superuser = models.BooleanField(null=True)
     is_employee = models.BooleanField(null=True)
-    REQUIRED_FIELDS = ['username', 'first_name', 'last_name', 'phone', 'is_staff', 'is_superuser', 'is_employee']
+    role = models.CharField(choices=USER_TYPE, max_length=20)
+    REQUIRED_FIELDS = ['username', 'first_name', 'last_name', 'phone', 'is_staff', 'is_superuser', 'is_employee', 'role']
     USERNAME_FIELD = 'email'
 
     def get_username(self):
         return self.username
 
 
-WEEKDAYS = [
-  (1, _("Monday")),
-  (2, _("Tuesday")),
-  (3, _("Wednesday")),
-  (4, _("Thursday")),
-  (5, _("Friday")),
-  (6, _("Saturday")),
-  (7, _("Sunday")),
-]
 
 class OpeningHours(models.Model):
+    WEEKDAYS = [
+        (1, _("Monday")),
+        (2, _("Tuesday")),
+        (3, _("Wednesday")),
+        (4, _("Thursday")),
+        (5, _("Friday")),
+        (6, _("Saturday")),
+        (7, _("Sunday")),
+    ]
+
     weekday = models.IntegerField(choices=WEEKDAYS)
     from_hour = models.TimeField()
     to_hour = models.TimeField()
@@ -75,18 +84,19 @@ class Salon(models.Model):
         verbose_name_plural = "Salony"
 
 
-RODZAJ_USLUGI = [
-    ("Fryzjerskie", "Fryzjerskie"),
-    ("Kosmetyczne", "Kosmetyczne"),
-    ("Barber", "Barber"),
-]
-
-TYP_USLUGI = [
-    ("Damskie", "Damskie"),
-    ("Meskie", "Meskie"),
-]
 
 class Usluga(models.Model):
+    RODZAJ_USLUGI = [
+        ("Fryzjerskie", "Fryzjerskie"),
+        ("Kosmetyczne", "Kosmetyczne"),
+        ("Barber", "Barber"),
+    ]
+
+    TYP_USLUGI = [
+        ("Damskie", "Damskie"),
+        ("Meskie", "Meskie"),
+    ]
+
     rodzaj_uslugi = models.CharField(choices=RODZAJ_USLUGI, max_length=20)
     typ_uslugi = models.CharField(choices=TYP_USLUGI, max_length=20)
     nazwa_uslugi = models.CharField(max_length=100, unique=True)

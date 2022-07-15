@@ -128,8 +128,9 @@ DJOSER = {
     'SEND_ACTIVATION_EMAIL': True,
     'SERIALIZERS': {
         'user_create': 'booking.serializers.UserCreateSerializer',
-        'user': 'booking.serializers.UserCreateSerializer',
-        'user_delete': 'djoser.serializers.UserDeleteSerializer',
+        # 'user': 'booking.serializers.UserCreateSerializer',
+        'user': 'booking.serializers.UserSerializer',
+        'user_delete': 'booking.serializers.UserDeleteSerializer',
     },
 }
 

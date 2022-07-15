@@ -1,6 +1,7 @@
 from django.contrib.auth import get_user_model
 from django.shortcuts import render
 from rest_framework import viewsets
+from rest_framework.exceptions import NotFound
 from rest_framework.permissions import IsAuthenticated
 from rest_framework import generics, permissions, status
 from .serializers import *
@@ -27,7 +28,6 @@ class UserList(generics.ListCreateAPIView):
     queryset = User.objects.all()
     serializer_class = UserCreateSerializer
     name = 'user-list'
-
 
 class UserDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = User.objects.all()
@@ -88,6 +88,43 @@ class OpeningHoursDetail(generics.RetrieveUpdateDestroyAPIView):
     # permission_classes = [IsAuthenticated]
 
 
+class PracownikList(generics.ListAPIView):
+    serializer_class = UserSerializer
+    name = 'pracownik'
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        queryset = User.objects.filter(role="employee")
+        if queryset:
+            return queryset
+        else:
+            raise NotFound()
+
+class WlascicielList(generics.ListAPIView):
+    serializer_class = UserSerializer
+    name = 'wlasciciel'
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        queryset = User.objects.filter(role="manager")
+        if queryset:
+            return queryset
+        else:
+            raise NotFound()
+
+class KlientList(generics.ListAPIView):
+    serializer_class = UserSerializer
+    name = 'klient'
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        queryset = User.objects.filter(role="user")
+        if queryset:
+            return queryset
+        else:
+            raise NotFound()
+
+
 
 
 
@@ -100,4 +137,7 @@ class ApiRoot(generics.GenericAPIView):
                          'usluga': reverse(UslugaList.name, request=request),
                          'reservation': reverse(ReservationList.name, request=request),
                          'openingHours': reverse(OpeningHoursList.name, request=request),
+                         'pracownik': reverse(PracownikList.name, request=request),
+                         'wlasciciel': reverse(WlascicielList.name, request=request),
+                         'klient': reverse(KlientList.name, request=request),
                          })

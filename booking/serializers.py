@@ -10,8 +10,13 @@ class UserCreateSerializer(UserCreateSerializer):
     class Meta(UserCreateSerializer.Meta):
         model = User
         fields = ['id', 'username', 'first_name', 'last_name', 'email', 'is_staff', 'is_superuser', 'is_employee',
-                  'password', 'phone', 'role']
+                  'password', 'phone', 'role', 'is_active']
 
+class UserSerializer(UserSerializer):
+    class Meta(UserCreateSerializer.Meta):
+        model = User
+        fields = ['id', 'username', 'first_name', 'last_name', 'email', 'is_staff', 'is_superuser', 'is_employee',
+                  'phone', 'role', 'is_active']
 
 class SalonSerializer(serializers.ModelSerializer):
     class Meta:
@@ -34,3 +39,6 @@ class OpeningHoursSerializer(serializers.ModelSerializer):
     class Meta:
         model = OpeningHours
         fields = '__all__'
+
+class UserDeleteSerializer(serializers.Serializer):
+    pass

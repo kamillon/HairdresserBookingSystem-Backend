@@ -88,7 +88,7 @@ class OpeningHoursDetail(generics.RetrieveUpdateDestroyAPIView):
     # permission_classes = [IsAuthenticated]
 
 
-class PracownikList(generics.ListAPIView):
+class PracownikList(generics.ListCreateAPIView):
     serializer_class = UserSerializer
     name = 'pracownik'
     permission_classes = [IsAuthenticated]
@@ -100,7 +100,19 @@ class PracownikList(generics.ListAPIView):
         else:
             raise NotFound()
 
-class WlascicielList(generics.ListAPIView):
+class PracownikDetail(generics.RetrieveUpdateDestroyAPIView):
+    serializer_class = UserSerializer
+    name = 'pracownik-details'
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        queryset = User.objects.filter(role="employee")
+        if queryset:
+            return queryset
+        else:
+            raise NotFound()
+
+class WlascicielList(generics.ListCreateAPIView):
     serializer_class = UserSerializer
     name = 'wlasciciel'
     permission_classes = [IsAuthenticated]
@@ -112,9 +124,33 @@ class WlascicielList(generics.ListAPIView):
         else:
             raise NotFound()
 
-class KlientList(generics.ListAPIView):
+class WlascicielDetail(generics.RetrieveUpdateDestroyAPIView):
+    serializer_class = UserSerializer
+    name = 'wlasciciel-details'
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        queryset = User.objects.filter(role="manager")
+        if queryset:
+            return queryset
+        else:
+            raise NotFound()
+
+class KlientList(generics.ListCreateAPIView):
     serializer_class = UserSerializer
     name = 'klient'
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        queryset = User.objects.filter(role="user")
+        if queryset:
+            return queryset
+        else:
+            raise NotFound()
+
+class KlientDetail(generics.RetrieveUpdateDestroyAPIView):
+    serializer_class = UserSerializer
+    name = 'klient-details'
     permission_classes = [IsAuthenticated]
 
     def get_queryset(self):

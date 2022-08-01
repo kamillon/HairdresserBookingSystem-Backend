@@ -69,7 +69,7 @@ class OpeningHours(models.Model):
 
 class Salon(models.Model):
     nazwa = models.CharField(max_length=50, unique=True)
-    miejscowosc = models.CharField(max_length=100, unique=True, blank=False, null=False)
+    miejscowosc = models.CharField(max_length=100, blank=False, null=False)
     ulica = models.CharField(max_length=100, unique=True)
     nr_budynku = models.CharField(max_length=5, unique=True)
     kod_pocztowy = models.CharField(max_length=20, blank=True, null=True)

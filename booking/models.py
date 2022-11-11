@@ -1,13 +1,20 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.utils.translation import gettext_lazy as _
+from django.db.models.signals import post_save
+from django.dispatch import receiver
+from django.conf import settings
+
+def upload_to(instance, filename):
+    return 'images/{filename}'.format(filename=filename)
+
 
 class User(AbstractUser):
     USER_TYPE = [
         ("admin", "admin"),
-        ("user", "klient"),
+        ("customer", "klient"),
         ("employee", "pracownik"),
-        ("manager", "właścieciel salonu"),
+        ("salon_owner", "właścieciel salonu"),
     ]
 
     email = models.EmailField(verbose_name='email', max_length=255, unique=True)
@@ -47,90 +54,109 @@ class OpeningHours(models.Model):
         return u'%s: %s - %s' % (self.get_weekday_display(),
                                  self.from_hour, self.to_hour)
 
-# class OpeningHours(models.Model):
-#     store = models.ForeignKey("StoreModel")
-#     weekday_from = models.PositiveSmallIntegerField(choices=WEEKDAYS, unique=True)
-#     weekday_to = models.PositiveSmallIntegerField(choices=WEEKDAYS)
-#     from_hour = models.PositiveSmallIntegerField(choices=HOUR_OF_DAY_24)
-#     to_hour = models.PositiveSmallIntegerField(choices=HOUR_OF_DAY_24)
-#
-#     def get_weekday_from_display(self):
-#         return WEEKDAYS[self.weekday_from]
-#
-#     def get_weekday_to_display(self):
-#         return WEEKDAYS[self.weekday_to]
 
-# class SpecialDays(models.Model):
-#     holiday_date = models.DateField()
-#     closed = models.BooleanField(default=True)
-#     from_hour = models.PositiveSmallIntegerField(choices=HOUR_OF_DAY_24, null=True, blank=True)
-#     to_hour = models.PositiveSmallIntegerField(choices=HOUR_OF_DAY_24, null=True, blank=True)
-
-
-class Salon(models.Model):
-    nazwa = models.CharField(max_length=50, unique=True)
-    miejscowosc = models.CharField(max_length=100, blank=False, null=False)
-    ulica = models.CharField(max_length=100, unique=True)
-    nr_budynku = models.CharField(max_length=5, unique=True)
-    kod_pocztowy = models.CharField(max_length=20, blank=True, null=True)
-    poczta = models.CharField(max_length=100, blank=True, null=True)
-    telefon = models.CharField(max_length=9, unique=True)
+class HairSalon(models.Model):
+    name = models.CharField(max_length=50, unique=True)
+    city = models.CharField(max_length=100, blank=False, null=False)
+    street = models.CharField(max_length=100, unique=True)
+    house_number = models.CharField(max_length=5, unique=True)
+    post_code = models.CharField(max_length=20, blank=True, null=True)
+    postal_code_locality = models.CharField(max_length=100, blank=True, null=True)
+    phone_number = models.CharField(max_length=9, unique=True)
     email = models.EmailField(max_length=100, unique=True)
-    wlasciciel = models.ForeignKey(User, null=True, on_delete=models.CASCADE)
+    owner = models.ForeignKey(User, null=True, on_delete=models.CASCADE)
 
     def __str__(self):
-        return self.nazwa
+        return self.name
     class Meta:
-        verbose_name_plural = "Salony"
+        verbose_name_plural = "HairSalons"
 
 
 
-class Usluga(models.Model):
-    RODZAJ_USLUGI = [
-        ("Fryzjerskie", "Fryzjerskie"),
-        ("Kosmetyczne", "Kosmetyczne"),
-        ("Barber", "Barber"),
+class Service(models.Model):
+    SERVICE_TYPE = [
+        ("women's", "Damskie"),
+        ("men's", "Meskie"),
     ]
 
-    TYP_USLUGI = [
-        ("Damskie", "Damskie"),
-        ("Meskie", "Meskie"),
-    ]
-
-    rodzaj_uslugi = models.CharField(choices=RODZAJ_USLUGI, max_length=20)
-    typ_uslugi = models.CharField(choices=TYP_USLUGI, max_length=20)
-    nazwa_uslugi = models.CharField(max_length=100, unique=True)
-    opis = models.TextField()
+    name = models.CharField(max_length=100, unique=True)
+    service_type = models.CharField(choices=SERVICE_TYPE, max_length=20)
+    describe = models.TextField(blank=True, null=True)
     #czas okreslony w minutach
-    czas = models.IntegerField(default=0)
-    cena = models.DecimalField(max_digits=10, decimal_places=2)
-    salonID = models.ForeignKey(Salon, on_delete=models.CASCADE)
+    time = models.IntegerField(default=0)
+    price = models.DecimalField(max_digits=10, decimal_places=2)
+    salonID = models.ForeignKey(HairSalon, on_delete=models.CASCADE)
 
     def __str__(self):
-        return self.nazwa_uslugi
+        return self.name
 
     class Meta:
-        verbose_name_plural = "Uslugi"
+        verbose_name_plural = "Services"
+
+
+class Customer(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='customer')
+    image = models.ImageField(upload_to=upload_to, blank=True, null=True, default='default.jpg')
+
+
+class Employee(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='employee')
+    salary = models.DecimalField(max_digits=6, decimal_places=2, null=True, blank=True)
+    salon = models.ForeignKey(HairSalon, null=True, on_delete=models.CASCADE)
+    image = models.ImageField(upload_to=upload_to, blank=True, null=True, default='default.jpg')
+
+
+class SalonOwner(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='salon_owner', primary_key=True)
+    salary = models.DecimalField(max_digits=6, decimal_places=2, null=True, blank=True)
+    salon = models.ForeignKey(HairSalon, null=True, on_delete=models.CASCADE)
+    image = models.ImageField(upload_to=upload_to, blank=True, null=True, default='default.jpg')
+
+
+class Admin(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='admin')
+    image = models.ImageField(upload_to=upload_to, blank=True, null=True, default='default.jpg')
 
 
 class Reservation(models.Model):
-    klientID = models.ForeignKey(User, on_delete=models.CASCADE, related_name='client_reservation')
-    salonID = models.ForeignKey(Salon, on_delete=models.CASCADE)
-    uslugaID = models.ForeignKey(Usluga, on_delete=models.CASCADE)
-    data = models.DateTimeField(null=False, blank=False)
-    godzina = models.TimeField()
-    do_kogo = models.ForeignKey(User, on_delete=models.CASCADE, related_name='employee_reservation')
+    customerId = models.ForeignKey(Customer, on_delete=models.CASCADE, related_name='customerId_reservation')
+    salonId = models.ForeignKey(HairSalon, on_delete=models.CASCADE, related_name='salonId_reservation')
+    serviceId = models.ForeignKey(Service, on_delete=models.CASCADE, related_name='serviceId_reservation')
+    date = models.DateField(null=False, blank=False)
+    start_time = models.TimeField()
+    end_time = models.TimeField()
+    employeeId = models.ForeignKey(User, on_delete=models.CASCADE, related_name='employeeId_reservation')
     is_active = models.BooleanField(default=False)
-
 
     def __str__(self):
         return self.id
 
     class Meta:
-        verbose_name_plural = "Rezerwacje"
+        verbose_name_plural = "Reservations"
 
     def __unicode__(self):
-        return str(self.data) + " User: " + str(self.klientID)
+        return str(self.data) + " User: " + str(self.customerId)
 
 
+class WorkHours(models.Model):
+    employeeId = models.ForeignKey(Employee, on_delete=models.CASCADE)
+    date = models.DateField(null=False, blank=False)
+    from_hour = models.TimeField(null=True, blank=True)
+    to_hours = models.TimeField(null=True, blank=True)
+    is_day_off = models.BooleanField(null=True, default=False)
 
+    def __str__(self):
+        return self.id
+
+
+@receiver(post_save, sender=User)
+def create_user_profile(sender, instance, created, **kwargs):
+    if created:
+        if instance.role == 'admin':
+            Admin.objects.create(user=instance)
+        elif instance.role == 'salon_owner':
+            SalonOwner.objects.create(user=instance)
+        elif instance.role == 'employee':
+            Employee.objects.create(user=instance)
+        elif instance.role == 'customer':
+            Customer.objects.create(user=instance)

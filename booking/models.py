@@ -30,6 +30,59 @@ class User(AbstractUser):
         return self.username
 
 
+class Admin(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='admin')
+    image = models.ImageField(upload_to=upload_to, blank=True, null=True, default='default.jpg')
+
+    def __str__(self):
+        return self.user.first_name + " " + self.user.last_name
+
+
+class Customer(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='customer')
+    image = models.ImageField(upload_to=upload_to, blank=True, null=True, default='default.jpg')
+
+    def __str__(self):
+        return self.user.first_name + " " + self.user.last_name
+
+
+class SalonOwner(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='salon_owner', primary_key=True)
+    salary = models.DecimalField(max_digits=6, decimal_places=2, null=True, blank=True)
+    image = models.ImageField(upload_to=upload_to, blank=True, null=True, default='default.jpg')
+
+    def __str__(self):
+        return self.user.first_name + " " + self.user.last_name
+
+
+
+class HairSalon(models.Model):
+    name = models.CharField(max_length=50, unique=True)
+    city = models.CharField(max_length=100, blank=False, null=False)
+    street = models.CharField(max_length=100, unique=True)
+    house_number = models.CharField(max_length=5, unique=True)
+    post_code = models.CharField(max_length=20, blank=True, null=True)
+    postal_code_locality = models.CharField(max_length=100, blank=True, null=True)
+    phone_number = models.CharField(max_length=9, unique=True)
+    email = models.EmailField(max_length=100, unique=True)
+    owner = models.ForeignKey(SalonOwner, null=True, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        verbose_name_plural = "HairSalons"
+
+
+class Employee(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='employee')
+    salary = models.DecimalField(max_digits=6, decimal_places=2, null=True, blank=True)
+    salon = models.ForeignKey(HairSalon, null=True, on_delete=models.CASCADE)
+    image = models.ImageField(upload_to=upload_to, blank=True, null=True, default='default.jpg')
+
+    def __str__(self):
+        return self.user.first_name + " " + self.user.last_name
+
 
 class OpeningHours(models.Model):
     WEEKDAYS = [
@@ -42,6 +95,7 @@ class OpeningHours(models.Model):
         (7, _("Sunday")),
     ]
 
+    salonId = models.ForeignKey(HairSalon, on_delete=models.CASCADE)
     weekday = models.IntegerField(choices=WEEKDAYS)
     from_hour = models.TimeField()
     to_hour = models.TimeField()
@@ -53,24 +107,6 @@ class OpeningHours(models.Model):
     def __unicode__(self):
         return u'%s: %s - %s' % (self.get_weekday_display(),
                                  self.from_hour, self.to_hour)
-
-
-class HairSalon(models.Model):
-    name = models.CharField(max_length=50, unique=True)
-    city = models.CharField(max_length=100, blank=False, null=False)
-    street = models.CharField(max_length=100, unique=True)
-    house_number = models.CharField(max_length=5, unique=True)
-    post_code = models.CharField(max_length=20, blank=True, null=True)
-    postal_code_locality = models.CharField(max_length=100, blank=True, null=True)
-    phone_number = models.CharField(max_length=9, unique=True)
-    email = models.EmailField(max_length=100, unique=True)
-    owner = models.ForeignKey(User, null=True, on_delete=models.CASCADE)
-
-    def __str__(self):
-        return self.name
-    class Meta:
-        verbose_name_plural = "HairSalons"
-
 
 
 class Service(models.Model):
@@ -94,30 +130,6 @@ class Service(models.Model):
         verbose_name_plural = "Services"
 
 
-class Customer(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='customer')
-    image = models.ImageField(upload_to=upload_to, blank=True, null=True, default='default.jpg')
-
-
-class Employee(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='employee')
-    salary = models.DecimalField(max_digits=6, decimal_places=2, null=True, blank=True)
-    salon = models.ForeignKey(HairSalon, null=True, on_delete=models.CASCADE)
-    image = models.ImageField(upload_to=upload_to, blank=True, null=True, default='default.jpg')
-
-
-class SalonOwner(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='salon_owner', primary_key=True)
-    salary = models.DecimalField(max_digits=6, decimal_places=2, null=True, blank=True)
-    salon = models.ForeignKey(HairSalon, null=True, on_delete=models.CASCADE)
-    image = models.ImageField(upload_to=upload_to, blank=True, null=True, default='default.jpg')
-
-
-class Admin(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='admin')
-    image = models.ImageField(upload_to=upload_to, blank=True, null=True, default='default.jpg')
-
-
 class Reservation(models.Model):
     customerId = models.ForeignKey(Customer, on_delete=models.CASCADE, related_name='customerId_reservation')
     salonId = models.ForeignKey(HairSalon, on_delete=models.CASCADE, related_name='salonId_reservation')
@@ -125,7 +137,7 @@ class Reservation(models.Model):
     date = models.DateField(null=False, blank=False)
     start_time = models.TimeField()
     end_time = models.TimeField()
-    employeeId = models.ForeignKey(User, on_delete=models.CASCADE, related_name='employeeId_reservation')
+    employeeId = models.ForeignKey(Employee, on_delete=models.CASCADE, related_name='employeeId_reservation')
     is_active = models.BooleanField(default=False)
 
     def __str__(self):
@@ -142,7 +154,7 @@ class WorkHours(models.Model):
     employeeId = models.ForeignKey(Employee, on_delete=models.CASCADE)
     date = models.DateField(null=False, blank=False)
     from_hour = models.TimeField(null=True, blank=True)
-    to_hours = models.TimeField(null=True, blank=True)
+    to_hour = models.TimeField(null=True, blank=True)
     is_day_off = models.BooleanField(null=True, default=False)
 
     def __str__(self):

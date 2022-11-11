@@ -24,7 +24,7 @@ class SalonSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class UslugaSerializer(serializers.ModelSerializer):
+class ServiceSerializer(serializers.ModelSerializer):
     class Meta:
         model = Service
         fields = '__all__'
@@ -39,13 +39,58 @@ class OpeningHoursSerializer(serializers.ModelSerializer):
     class Meta:
         model = OpeningHours
         fields = '__all__'
+        # extra_kwargs = {'od_godziny': {'format': '%H:%M'}}
+
 
 class UserDeleteSerializer(serializers.Serializer):
     pass
 
 
+class AdminSerializer(serializers.ModelSerializer):
+    user = UserSerializer(required=True)
+
+    class Meta:
+        model = Admin
+        fields = ('user', 'image')
+
+
 class SalonOwnerSerializer(serializers.ModelSerializer):
     user = UserSerializer(required=True)
+
     class Meta:
         model = SalonOwner
-        fields = ('user', 'salary', 'salon', 'image')
+        fields = ('user', 'salary', 'image')
+
+        # def create(self, validated_data):
+        #     """
+        #     Overriding the default create method of the Model serializer.
+        #     :param validated_data: data containing all the details of student
+        #     :return: returns a successfully created student record
+        #     """
+        #     user_data = validated_data.pop('user')
+        #     user = UserSerializer.create(UserSerializer(), validated_data=user_data)
+        #     salonOwner, created = SalonOwner.objects.update_or_create(user=user,
+        #                                                               salary=validated_data.pop('salary'))
+        #     return salonOwner
+
+
+class EmployeeSerializer(serializers.ModelSerializer):
+    user = UserSerializer(required=True, many=False)
+
+    class Meta:
+        model = Employee
+        fields = ('salary', 'image', 'user')
+
+
+class CustomerSerializer(serializers.ModelSerializer):
+    user = UserSerializer(required=True)
+
+    class Meta:
+        model = Customer
+        fields = ('user', 'image')
+
+
+class WorkHoursSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = WorkHours
+        fields = '__all__'

@@ -12,23 +12,14 @@ from rest_framework.parsers import MultiPartParser, FormParser
 
 User = get_user_model()
 
-
-# class UserView(viewsets.ModelViewSet):
-#     serializer_class = UserCreateSerializer
-#     queryset = User.objects.all()
-#     permission_classes = [IsAuthenticated]
-#
-
-
-
-
-
 # Create your views here.
+
 
 class UserList(generics.ListCreateAPIView):
     queryset = User.objects.all()
     serializer_class = UserCreateSerializer
     name = 'user-list'
+
 
 class UserDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = User.objects.all()
@@ -42,6 +33,7 @@ class SalonList(generics.ListCreateAPIView):
     name = 'salon-list'
     # permission_classes = [IsAuthenticated]
 
+
 class SalonDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = HairSalon.objects.all()
     serializer_class = SalonSerializer
@@ -49,17 +41,17 @@ class SalonDetail(generics.RetrieveUpdateDestroyAPIView):
     # permission_classes = [IsAuthenticated]
 
 
-
-class UslugaList(generics.ListCreateAPIView):
+class ServiceList(generics.ListCreateAPIView):
     queryset = Service.objects.all()
-    serializer_class = UslugaSerializer
-    name = 'usluga-list'
+    serializer_class = ServiceSerializer
+    name = 'service-list'
     # permission_classes = [IsAuthenticated]
 
-class UslugaDetail(generics.RetrieveUpdateDestroyAPIView):
+
+class ServiceDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Service.objects.all()
-    serializer_class = UslugaSerializer
-    name = 'usluga-details'
+    serializer_class = ServiceSerializer
+    name = 'service-details'
     # permission_classes = [IsAuthenticated]
 
 
@@ -68,6 +60,7 @@ class ReservationList(generics.ListCreateAPIView):
     serializer_class = ReservationSerializer
     name = 'reservation-list'
     # permission_classes = [IsAuthenticated]
+
 
 class ReservationDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Reservation.objects.all()
@@ -82,6 +75,7 @@ class OpeningHoursList(generics.ListCreateAPIView):
     name = 'opening-hours-list'
     # permission_classes = [IsAuthenticated]
 
+
 class OpeningHoursDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = OpeningHours.objects.all()
     serializer_class = OpeningHoursSerializer
@@ -89,77 +83,20 @@ class OpeningHoursDetail(generics.RetrieveUpdateDestroyAPIView):
     # permission_classes = [IsAuthenticated]
 
 
-class PracownikList(generics.ListCreateAPIView):
-    serializer_class = UserSerializer
-    name = 'pracownik'
+class AdminList(generics.ListCreateAPIView):
+    queryset = Admin.objects.all()
+    serializer_class = AdminSerializer
+    name = 'admin-info'
     permission_classes = [IsAuthenticated]
+    parser_classes = [MultiPartParser, FormParser]
 
-    def get_queryset(self):
-        queryset = User.objects.filter(role="employee")
-        if queryset:
-            return queryset
-        else:
-            raise NotFound()
 
-class PracownikDetail(generics.RetrieveUpdateDestroyAPIView):
-    serializer_class = UserSerializer
-    name = 'pracownik-details'
+class AdminDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Admin.objects.all()
+    serializer_class = AdminSerializer
+    name = 'admin-info-details'
     permission_classes = [IsAuthenticated]
-
-    def get_queryset(self):
-        queryset = User.objects.filter(role="employee")
-        if queryset:
-            return queryset
-        else:
-            raise NotFound()
-
-class WlascicielList(generics.ListCreateAPIView):
-    serializer_class = UserSerializer
-    name = 'wlasciciel'
-    permission_classes = [IsAuthenticated]
-
-    def get_queryset(self):
-        queryset = User.objects.filter(role="salon_owner")
-        if queryset:
-            return queryset
-        else:
-            raise NotFound()
-
-class WlascicielDetail(generics.RetrieveUpdateDestroyAPIView):
-    serializer_class = UserSerializer
-    name = 'wlasciciel-details'
-    permission_classes = [IsAuthenticated]
-
-    def get_queryset(self):
-        queryset = User.objects.filter(role="salon_owner")
-        if queryset:
-            return queryset
-        else:
-            raise NotFound()
-
-class KlientList(generics.ListCreateAPIView):
-    serializer_class = UserSerializer
-    name = 'klient'
-    permission_classes = [IsAuthenticated]
-
-    def get_queryset(self):
-        queryset = User.objects.filter(role="customer")
-        if queryset:
-            return queryset
-        else:
-            raise NotFound()
-
-class KlientDetail(generics.RetrieveUpdateDestroyAPIView):
-    serializer_class = UserSerializer
-    name = 'klient-details'
-    permission_classes = [IsAuthenticated]
-
-    def get_queryset(self):
-        queryset = User.objects.filter(role="customer")
-        if queryset:
-            return queryset
-        else:
-            raise NotFound()
+    parser_classes = [MultiPartParser, FormParser]
 
 
 class SalonOwnerList(generics.ListCreateAPIView):
@@ -178,17 +115,79 @@ class SalonOwnerDetail(generics.RetrieveUpdateDestroyAPIView):
     parser_classes = [MultiPartParser, FormParser]
 
 
+class EmployeeList(generics.ListCreateAPIView):
+    queryset = Employee.objects.all()
+    serializer_class = EmployeeSerializer
+    name = 'employee'
+    permission_classes = [IsAuthenticated]
+    parser_classes = [MultiPartParser, FormParser]
+
+
+class EmployeeDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Employee.objects.all()
+    serializer_class = EmployeeSerializer
+    name = 'employee-details'
+    permission_classes = [IsAuthenticated]
+    parser_classes = [MultiPartParser, FormParser]
+
+
+class CustomerList(generics.ListCreateAPIView):
+    queryset = Customer.objects.all()
+    serializer_class = CustomerSerializer
+    name = 'customer'
+    permission_classes = [IsAuthenticated]
+    parser_classes = [MultiPartParser, FormParser]
+
+
+class CustomerDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Customer.objects.all()
+    serializer_class = CustomerSerializer
+    name = 'customer-details'
+    permission_classes = [IsAuthenticated]
+    parser_classes = [MultiPartParser, FormParser]
+
+
+class WorkHoursList(generics.ListCreateAPIView):
+    queryset = WorkHours.objects.all()
+    serializer_class = WorkHoursSerializer
+    name = 'work-hours'
+    # permission_classes = [IsAuthenticated]
+
+
+class WorkHoursDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = WorkHours.objects.all()
+    serializer_class = WorkHoursSerializer
+    name = 'work-hours-details'
+    # permission_classes = [IsAuthenticated]
+
+
+class EmployeeWorkHours(generics.ListAPIView):
+    serializer_class = WorkHoursSerializer
+    name = 'employee-work-hours'
+    # permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        slug = self.kwargs['pk']
+        queryset = WorkHours.objects.filter(employeeId=slug)
+        if queryset:
+            return queryset
+        else:
+            raise NotFound()
+
+
 class ApiRoot(generics.GenericAPIView):
     name = 'api-root'
 
     def get(self, request, *args, **kwargs):
-        return Response({'pracownicy': reverse(UserList.name, request=request),
+        return Response({'allUserList': reverse(UserList.name, request=request),
                          'salon': reverse(SalonList.name, request=request),
-                         'usluga': reverse(UslugaList.name, request=request),
+                         'service': reverse(ServiceList.name, request=request),
                          'reservation': reverse(ReservationList.name, request=request),
                          'openingHours': reverse(OpeningHoursList.name, request=request),
+                         'admin': reverse(AdminList.name, request=request),
                          'salonOwner': reverse(SalonOwnerList.name, request=request),
-                         'pracownik': reverse(PracownikList.name, request=request),
-                         'wlasciciel': reverse(WlascicielList.name, request=request),
-                         'klient': reverse(KlientList.name, request=request),
+                         'employee': reverse(EmployeeList.name, request=request),
+                         'customer': reverse(CustomerList.name, request=request),
+                         'workHours': reverse(WorkHoursList.name, request=request),
+                         'employeeWorkHours': "http://127.0.0.1:8000/employee-work-hours/1",
                          })

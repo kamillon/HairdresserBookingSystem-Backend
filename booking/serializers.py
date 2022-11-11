@@ -20,20 +20,20 @@ class UserSerializer(UserSerializer):
 
 class SalonSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Salon
+        model = HairSalon
         fields = '__all__'
 
 
 class UslugaSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Usluga
+        model = Service
         fields = '__all__'
 
 class ReservationSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Reservation
-        fields = ['id', 'klientID', 'salonID', 'uslugaID', 'do_kogo', 'data', 'godzina', 'is_active']
+        fields = ['id', 'customerId', 'salonId', 'serviceId', 'employeeId', 'date', 'start_time', 'end_time', 'is_active']
 
 class OpeningHoursSerializer(serializers.ModelSerializer):
     class Meta:
@@ -42,3 +42,10 @@ class OpeningHoursSerializer(serializers.ModelSerializer):
 
 class UserDeleteSerializer(serializers.Serializer):
     pass
+
+
+class SalonOwnerSerializer(serializers.ModelSerializer):
+    user = UserSerializer(required=True)
+    class Meta:
+        model = SalonOwner
+        fields = ('user', 'salary', 'salon', 'image')

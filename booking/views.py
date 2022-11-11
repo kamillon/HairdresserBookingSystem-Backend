@@ -8,6 +8,7 @@ from .serializers import *
 from .models import *
 from rest_framework.response import Response
 from rest_framework.reverse import reverse
+from rest_framework.parsers import MultiPartParser, FormParser
 
 User = get_user_model()
 
@@ -36,13 +37,13 @@ class UserDetail(generics.RetrieveUpdateDestroyAPIView):
 
 
 class SalonList(generics.ListCreateAPIView):
-    queryset = Salon.objects.all()
+    queryset = HairSalon.objects.all()
     serializer_class = SalonSerializer
     name = 'salon-list'
     # permission_classes = [IsAuthenticated]
 
 class SalonDetail(generics.RetrieveUpdateDestroyAPIView):
-    queryset = Salon.objects.all()
+    queryset = HairSalon.objects.all()
     serializer_class = SalonSerializer
     name = 'salon-details'
     # permission_classes = [IsAuthenticated]
@@ -50,13 +51,13 @@ class SalonDetail(generics.RetrieveUpdateDestroyAPIView):
 
 
 class UslugaList(generics.ListCreateAPIView):
-    queryset = Usluga.objects.all()
+    queryset = Service.objects.all()
     serializer_class = UslugaSerializer
     name = 'usluga-list'
     # permission_classes = [IsAuthenticated]
 
 class UslugaDetail(generics.RetrieveUpdateDestroyAPIView):
-    queryset = Usluga.objects.all()
+    queryset = Service.objects.all()
     serializer_class = UslugaSerializer
     name = 'usluga-details'
     # permission_classes = [IsAuthenticated]
@@ -118,7 +119,7 @@ class WlascicielList(generics.ListCreateAPIView):
     permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
-        queryset = User.objects.filter(role="manager")
+        queryset = User.objects.filter(role="salon_owner")
         if queryset:
             return queryset
         else:
@@ -130,7 +131,7 @@ class WlascicielDetail(generics.RetrieveUpdateDestroyAPIView):
     permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
-        queryset = User.objects.filter(role="manager")
+        queryset = User.objects.filter(role="salon_owner")
         if queryset:
             return queryset
         else:
@@ -142,7 +143,7 @@ class KlientList(generics.ListCreateAPIView):
     permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
-        queryset = User.objects.filter(role="user")
+        queryset = User.objects.filter(role="customer")
         if queryset:
             return queryset
         else:
@@ -154,14 +155,27 @@ class KlientDetail(generics.RetrieveUpdateDestroyAPIView):
     permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
-        queryset = User.objects.filter(role="user")
+        queryset = User.objects.filter(role="customer")
         if queryset:
             return queryset
         else:
             raise NotFound()
 
 
+class SalonOwnerList(generics.ListCreateAPIView):
+    queryset = SalonOwner.objects.all()
+    serializer_class = SalonOwnerSerializer
+    name = 'salon-owner'
+    permission_classes = [IsAuthenticated]
+    parser_classes = [MultiPartParser, FormParser]
 
+
+class SalonOwnerDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = SalonOwner.objects.all()
+    serializer_class = SalonOwnerSerializer
+    name = 'salon-owner-details'
+    permission_classes = [IsAuthenticated]
+    parser_classes = [MultiPartParser, FormParser]
 
 
 class ApiRoot(generics.GenericAPIView):
@@ -173,6 +187,7 @@ class ApiRoot(generics.GenericAPIView):
                          'usluga': reverse(UslugaList.name, request=request),
                          'reservation': reverse(ReservationList.name, request=request),
                          'openingHours': reverse(OpeningHoursList.name, request=request),
+                         'salonOwner': reverse(SalonOwnerList.name, request=request),
                          'pracownik': reverse(PracownikList.name, request=request),
                          'wlasciciel': reverse(WlascicielList.name, request=request),
                          'klient': reverse(KlientList.name, request=request),

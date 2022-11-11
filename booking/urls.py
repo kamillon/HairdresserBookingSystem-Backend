@@ -26,6 +26,8 @@ urlpatterns = [
     path('reservation/<int:pk>/', views.ReservationDetail.as_view(), name='reservation-details'),
     path('opening-hours/', views.OpeningHoursList.as_view(), name='opening-hours-list'),
     path('opening-hours/<int:pk>/', views.ReservationDetail.as_view(), name='opening-hours-details'),
+    path('salon-owner/', views.SalonOwnerList.as_view(), name='salon-owner'),
+    path('salon-owner/<int:pk>/', views.SalonOwnerDetail.as_view(), name='salon-owner-details'),
     path('', views.ApiRoot.as_view(), name=views.ApiRoot.name),
     path('', include('djoser.urls')),
     path('', include('djoser.urls.authtoken')),

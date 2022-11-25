@@ -174,6 +174,19 @@ class EmployeeWorkHours(generics.ListAPIView):
         else:
             raise NotFound()
 
+class ListOfOwnersSalons(generics.ListAPIView):
+    serializer_class = ListOfOwnersSalonsSerializer
+    name = 'list-of-owners-salons'
+    # permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        slug = self.kwargs['pk']
+        queryset = HairSalon.objects.filter(owner=slug)
+        if queryset:
+            return queryset
+        else:
+            raise NotFound()
+
 
 class ApiRoot(generics.GenericAPIView):
     name = 'api-root'
@@ -190,4 +203,5 @@ class ApiRoot(generics.GenericAPIView):
                          'customer': reverse(CustomerList.name, request=request),
                          'workHours': reverse(WorkHoursList.name, request=request),
                          'employeeWorkHours': "http://127.0.0.1:8000/employee-work-hours/1",
+                         'listOfOwnersSalons': "http://127.0.0.1:8000/list-of-owners-salons/1",
                          })

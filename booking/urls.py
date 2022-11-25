@@ -37,6 +37,7 @@ urlpatterns = [
     path('work-hours/', views.WorkHoursList.as_view(), name='work-hours'),
     path('work-hours/<int:pk>/', views.WorkHoursDetail.as_view(), name='work-hours-details'),
     path('employee-work-hours/<int:pk>/', views.EmployeeWorkHours.as_view(), name='employee-work-hours'),
+    path('list-of-owners-salons/<int:pk>/', views.ListOfOwnersSalons.as_view(), name='list-of-owners-salons'),
     path('', views.ApiRoot.as_view(), name=views.ApiRoot.name),
     path('', include('djoser.urls')),
     path('', include('djoser.urls.authtoken')),

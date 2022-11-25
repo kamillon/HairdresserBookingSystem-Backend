@@ -75,11 +75,11 @@ class SalonOwnerSerializer(serializers.ModelSerializer):
 
 
 class EmployeeSerializer(serializers.ModelSerializer):
-    user = UserSerializer(required=True, many=False)
+    user = UserSerializer(read_only=True)
 
     class Meta:
         model = Employee
-        fields = ('salary', 'image', 'user')
+        fields = ('id', 'salary', 'image', 'salon', 'user')
 
 
 class CustomerSerializer(serializers.ModelSerializer):
@@ -93,4 +93,10 @@ class CustomerSerializer(serializers.ModelSerializer):
 class WorkHoursSerializer(serializers.ModelSerializer):
     class Meta:
         model = WorkHours
+        fields = '__all__'
+
+
+class ListOfOwnersSalonsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = HairSalon
         fields = '__all__'

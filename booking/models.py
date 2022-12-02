@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.utils.translation import gettext_lazy as _
@@ -149,6 +151,24 @@ class Reservation(models.Model):
     def __unicode__(self):
         return str(self.data) + " User: " + str(self.customerId)
 
+    # def is_active(self):
+    #     now = datetime.now().date()
+    #     if now > self.date and self.is_active:
+    #         self.active = False
+    #         self.save()
+    #         return False
+    #     return self.is_active
+
+    # @property
+    # def is_active(self):
+    #     return datetime.now().date() < self.date
+
+    @property
+    def is_active(self):
+        now = datetime.now().date()
+        if now > self.date:
+            return False
+        return True
 
 class WorkHours(models.Model):
     employeeId = models.ForeignKey(Employee, on_delete=models.CASCADE)
@@ -172,3 +192,9 @@ def create_user_profile(sender, instance, created, **kwargs):
             Employee.objects.create(user=instance)
         elif instance.role == 'customer':
             Customer.objects.create(user=instance)
+
+
+@receiver(post_save, sender=HairSalon)
+def create_opening_hours(sender, instance, created, **kwargs):
+    if created:
+        OpeningHours.objects.create(salonId=instance, weekday=1, from_hour="08:00:00", to_hour="16:00:00")

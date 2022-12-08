@@ -39,6 +39,7 @@ class OpeningHoursSerializer(serializers.ModelSerializer):
     class Meta:
         model = OpeningHours
         fields = '__all__'
+        # validators = []
         # extra_kwargs = {'od_godziny': {'format': '%H:%M'}}
 
 
@@ -51,7 +52,7 @@ class AdminSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Admin
-        fields = ('user', 'image')
+        fields = '__all__'
 
 
 class SalonOwnerSerializer(serializers.ModelSerializer):
@@ -59,7 +60,7 @@ class SalonOwnerSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = SalonOwner
-        fields = ('user', 'salary', 'image')
+        fields = '__all__'
 
         # def create(self, validated_data):
         #     """
@@ -79,7 +80,7 @@ class EmployeeSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Employee
-        fields = ('id', 'salary', 'image', 'salon', 'user')
+        fields = ('salon', 'user')
 
 
 class CustomerSerializer(serializers.ModelSerializer):
@@ -87,7 +88,7 @@ class CustomerSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Customer
-        fields = ('user', 'image')
+        fields = '__all__'
 
 
 class WorkHoursSerializer(serializers.ModelSerializer):
@@ -99,4 +100,10 @@ class WorkHoursSerializer(serializers.ModelSerializer):
 class ListOfOwnersSalonsSerializer(serializers.ModelSerializer):
     class Meta:
         model = HairSalon
+        fields = '__all__'
+
+
+class ListOpeningHours(serializers.ModelSerializer):
+    class Meta:
+        model = OpeningHours
         fields = '__all__'

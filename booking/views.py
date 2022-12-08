@@ -128,7 +128,7 @@ class EmployeeDetail(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = EmployeeSerializer
     name = 'employee-details'
     # permission_classes = [IsAuthenticated]
-    parser_classes = [MultiPartParser, FormParser]
+    # parser_classes = [MultiPartParser, FormParser]
 
 
 class CustomerList(generics.ListCreateAPIView):
@@ -187,6 +187,19 @@ class ListOfOwnersSalons(generics.ListAPIView):
         else:
             raise NotFound()
 
+class ListOpeningHours(generics.ListAPIView):
+    serializer_class = ListOpeningHours
+    name = 'list-opening-hours'
+    # permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        slug = self.kwargs['pk']
+        queryset = OpeningHours.objects.filter(salonId=slug)
+        if queryset:
+            return queryset
+        else:
+            raise NotFound()
+
 
 class ApiRoot(generics.GenericAPIView):
     name = 'api-root'
@@ -204,4 +217,5 @@ class ApiRoot(generics.GenericAPIView):
                          'workHours': reverse(WorkHoursList.name, request=request),
                          'employeeWorkHours': "http://127.0.0.1:8000/employee-work-hours/1",
                          'listOfOwnersSalons': "http://127.0.0.1:8000/list-of-owners-salons/1",
+                         'listOpeningHours': "http://127.0.0.1:8000/list-opening-hours/1",
                          })

@@ -8,7 +8,6 @@ from .serializers import *
 from .models import *
 from rest_framework.response import Response
 from rest_framework.reverse import reverse
-from rest_framework.parsers import MultiPartParser, FormParser
 
 User = get_user_model()
 
@@ -88,7 +87,6 @@ class AdminList(generics.ListCreateAPIView):
     serializer_class = AdminSerializer
     name = 'admin-info'
     permission_classes = [IsAuthenticated]
-    parser_classes = [MultiPartParser, FormParser]
 
 
 class AdminDetail(generics.RetrieveUpdateDestroyAPIView):
@@ -96,7 +94,6 @@ class AdminDetail(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = AdminSerializer
     name = 'admin-info-details'
     permission_classes = [IsAuthenticated]
-    parser_classes = [MultiPartParser, FormParser]
 
 
 class SalonOwnerList(generics.ListCreateAPIView):
@@ -104,7 +101,6 @@ class SalonOwnerList(generics.ListCreateAPIView):
     serializer_class = SalonOwnerSerializer
     name = 'salon-owner'
     permission_classes = [IsAuthenticated]
-    parser_classes = [MultiPartParser, FormParser]
 
 
 class SalonOwnerDetail(generics.RetrieveUpdateDestroyAPIView):
@@ -112,7 +108,6 @@ class SalonOwnerDetail(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = SalonOwnerSerializer
     name = 'salon-owner-details'
     permission_classes = [IsAuthenticated]
-    parser_classes = [MultiPartParser, FormParser]
 
 
 class EmployeeList(generics.ListCreateAPIView):
@@ -120,7 +115,6 @@ class EmployeeList(generics.ListCreateAPIView):
     serializer_class = EmployeeSerializer
     name = 'employee'
     # permission_classes = [IsAuthenticated]
-    parser_classes = [MultiPartParser, FormParser]
 
 
 class EmployeeDetail(generics.RetrieveUpdateDestroyAPIView):
@@ -128,7 +122,6 @@ class EmployeeDetail(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = EmployeeSerializer
     name = 'employee-details'
     # permission_classes = [IsAuthenticated]
-    # parser_classes = [MultiPartParser, FormParser]
 
 
 class CustomerList(generics.ListCreateAPIView):
@@ -136,7 +129,6 @@ class CustomerList(generics.ListCreateAPIView):
     serializer_class = CustomerSerializer
     name = 'customer'
     permission_classes = [IsAuthenticated]
-    parser_classes = [MultiPartParser, FormParser]
 
 
 class CustomerDetail(generics.RetrieveUpdateDestroyAPIView):
@@ -144,7 +136,6 @@ class CustomerDetail(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = CustomerSerializer
     name = 'customer-details'
     permission_classes = [IsAuthenticated]
-    parser_classes = [MultiPartParser, FormParser]
 
 
 class WorkHoursList(generics.ListCreateAPIView):

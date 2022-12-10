@@ -101,14 +101,6 @@ class OpeningHours(models.Model):
     to_hour = models.TimeField(blank=True, null=True, unique=False)
     is_closed = models.BooleanField(default=False)
 
-    class Meta:
-        ordering = ('weekday', 'from_hour')
-        unique_together = ('weekday', 'from_hour', 'to_hour')
-
-    def __unicode__(self):
-        return u'%s: %s - %s' % (self.get_weekday_display(),
-                                 self.from_hour, self.to_hour)
-
 
 class Service(models.Model):
     SERVICE_TYPE = [

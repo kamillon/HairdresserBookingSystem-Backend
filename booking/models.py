@@ -188,6 +188,8 @@ def create_user_profile(sender, instance, created, **kwargs):
             Admin.objects.create(user=instance)
         elif instance.role == 'salon_owner':
             SalonOwner.objects.create(user=instance)
+        elif instance.role == 'employee':
+            Employee.objects.create(user=instance)
         elif instance.role == 'customer':
             Customer.objects.create(user=instance)
 

@@ -76,23 +76,25 @@ class SalonOwnerSerializer(serializers.ModelSerializer):
 
 
 class EmployeeSerializer(serializers.ModelSerializer):
-    user = UserSerializer(required=True)
+    user = UserCreateSerializer(required=True)
 
     class Meta:
         model = Employee
         fields = ('salon', 'user')
 
-    # def create(self, validated_data):
-    #     """
-    #     Overriding the default create method of the Model serializer.
-    #     :param validated_data: data containing all the details of employee
-    #     :return: returns a successfully created employee record
-    #     """
-    #     user_data = validated_data.pop('user')
-    #     user = UserSerializer.create(UserSerializer(), validated_data=user_data)
-    #     employee, created = Employee.objects.update_or_create(user=user,
-    #                                                           salon=validated_data.pop('salon'))
-    #     return employee
+    def create(self, validated_data):
+        """
+        Overriding the default create method of the Model serializer.
+        :param validated_data: data containing all the details of employee
+        :return: returns a successfully created employee record
+        """
+        user_data = validated_data.pop('user')
+        user = UserCreateSerializer.create(UserCreateSerializer(), validated_data=user_data)
+        user.is_active = True
+        user.save(update_fields=["is_active"])
+        employee, created = Employee.objects.update_or_create(user=user,
+                                                              salon=validated_data.pop('salon'))
+        return employee
 
 
 class CustomerSerializer(serializers.ModelSerializer):

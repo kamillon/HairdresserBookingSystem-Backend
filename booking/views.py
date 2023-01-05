@@ -2,7 +2,7 @@ from django.contrib.auth import get_user_model
 from django.shortcuts import render
 from rest_framework import viewsets
 from rest_framework.exceptions import NotFound
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
 from rest_framework import generics, permissions, status
 from .serializers import *
 from .models import *
@@ -18,68 +18,70 @@ class UserList(generics.ListCreateAPIView):
     queryset = User.objects.all()
     serializer_class = UserCreateSerializer
     name = 'user-list'
+    permission_classes = [IsAuthenticated]
 
 
 class UserDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = User.objects.all()
     serializer_class = UserCreateSerializer
     name = 'user-details'
+    permission_classes = [IsAuthenticated]
 
 
 class SalonList(generics.ListCreateAPIView):
     queryset = HairSalon.objects.all()
     serializer_class = SalonSerializer
     name = 'salon-list'
-    # permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticatedOrReadOnly]
 
 
 class SalonDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = HairSalon.objects.all()
     serializer_class = SalonSerializer
     name = 'salon-details'
-    # permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated]
 
 
 class ServiceList(generics.ListCreateAPIView):
     queryset = Service.objects.all()
     serializer_class = ServiceSerializer
     name = 'service-list'
-    # permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticatedOrReadOnly]
 
 
 class ServiceDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Service.objects.all()
     serializer_class = ServiceSerializer
     name = 'service-details'
-    # permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated]
 
 
 class ReservationList(generics.ListCreateAPIView):
     queryset = Reservation.objects.all()
     serializer_class = ReservationSerializer
     name = 'reservation-list'
-    # permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticatedOrReadOnly]
 
 
 class ReservationDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Reservation.objects.all()
     serializer_class = ReservationSerializer
     name = 'reservation-details'
-    # permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated]
 
 
 class OpeningHoursList(generics.ListCreateAPIView):
     queryset = OpeningHours.objects.all()
     serializer_class = OpeningHoursSerializer
     name = 'opening-hours-list'
-    # permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated]
 
 
 class OpeningHoursDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = OpeningHours.objects.all()
     serializer_class = OpeningHoursSerializer
     name = 'opening-hours-details'
-    # permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated]
 
 
 class AdminList(generics.ListCreateAPIView):
@@ -114,14 +116,14 @@ class EmployeeList(generics.ListCreateAPIView):
     queryset = Employee.objects.all()
     serializer_class = EmployeeSerializer
     name = 'employee'
-    # permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticatedOrReadOnly]
 
 
 class EmployeeDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Employee.objects.all()
     serializer_class = EmployeeSerializer
     name = 'employee-details'
-    # permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated]
 
 
 class CustomerList(generics.ListCreateAPIView):
@@ -142,20 +144,20 @@ class WorkHoursList(generics.ListCreateAPIView):
     queryset = WorkHours.objects.all()
     serializer_class = WorkHoursSerializer
     name = 'work-hours'
-    # permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated]
 
 
 class WorkHoursDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = WorkHours.objects.all()
     serializer_class = WorkHoursSerializer
     name = 'work-hours-details'
-    # permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated]
 
 
 class EmployeeWorkHours(generics.ListAPIView):
     serializer_class = WorkHoursSerializer
     name = 'employee-work-hours'
-    # permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticatedOrReadOnly]
 
     def get_queryset(self):
         slug = self.kwargs['pk']
@@ -168,7 +170,7 @@ class EmployeeWorkHours(generics.ListAPIView):
 class ListOfOwnersSalons(generics.ListAPIView):
     serializer_class = ListOfOwnersSalonsSerializer
     name = 'list-of-owners-salons'
-    # permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
         slug = self.kwargs['pk']
@@ -181,7 +183,7 @@ class ListOfOwnersSalons(generics.ListAPIView):
 class ListOpeningHours(generics.ListAPIView):
     serializer_class = ListOpeningHours
     name = 'list-opening-hours'
-    # permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticatedOrReadOnly]
 
     def get_queryset(self):
         slug = self.kwargs['pk']

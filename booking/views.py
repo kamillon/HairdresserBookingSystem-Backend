@@ -70,6 +70,13 @@ class ReservationDetail(generics.RetrieveUpdateDestroyAPIView):
     permission_classes = [IsAuthenticated]
 
 
+class ReservationAllInformation(generics.ListCreateAPIView):
+    queryset = Reservation.objects.all()
+    serializer_class = ReservationAllSerializer
+    name = 'reservation-all-information'
+    permission_classes = [IsAuthenticated]
+
+
 class OpeningHoursList(generics.ListCreateAPIView):
     queryset = OpeningHours.objects.all()
     serializer_class = OpeningHoursSerializer
@@ -167,6 +174,7 @@ class EmployeeWorkHours(generics.ListAPIView):
         else:
             raise NotFound()
 
+
 class ListOfOwnersSalons(generics.ListAPIView):
     serializer_class = ListOfOwnersSalonsSerializer
     name = 'list-of-owners-salons'
@@ -179,6 +187,7 @@ class ListOfOwnersSalons(generics.ListAPIView):
             return queryset
         else:
             raise NotFound()
+
 
 class ListOpeningHours(generics.ListAPIView):
     serializer_class = ListOpeningHours
@@ -202,6 +211,7 @@ class ApiRoot(generics.GenericAPIView):
                          'salon': reverse(SalonList.name, request=request),
                          'service': reverse(ServiceList.name, request=request),
                          'reservation': reverse(ReservationList.name, request=request),
+                         'reservationAll': reverse(ReservationAllInformation.name, request=request),
                          'openingHours': reverse(OpeningHoursList.name, request=request),
                          'admin': reverse(AdminList.name, request=request),
                          'salonOwner': reverse(SalonOwnerList.name, request=request),

@@ -33,7 +33,9 @@ class ReservationSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Reservation
-        fields = ['id', 'customerId', 'salonId', 'serviceId', 'employeeId', 'date', 'start_time', 'end_time', 'is_active']
+        fields = ['id', 'customerId', 'salonId', 'serviceId',
+                  'employeeId', 'date', 'start_time', 'end_time', 'is_active']
+
 
 class OpeningHoursSerializer(serializers.ModelSerializer):
     class Meta:
@@ -121,3 +123,15 @@ class ListOpeningHours(serializers.ModelSerializer):
     class Meta:
         model = OpeningHours
         fields = '__all__'
+
+
+class ReservationAllSerializer(serializers.ModelSerializer):
+    customerId = CustomerSerializer()
+    salonId = SalonSerializer()
+    serviceId = ServiceSerializer()
+    employeeId = EmployeeSerializer()
+
+    class Meta:
+        model = Reservation
+        fields = ['id', 'customerId', 'salonId', 'serviceId',
+                  'employeeId', 'date', 'start_time', 'end_time', 'is_active']

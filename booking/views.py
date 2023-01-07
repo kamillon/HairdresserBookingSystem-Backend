@@ -34,6 +34,13 @@ class SalonList(generics.ListCreateAPIView):
     name = 'salon-list'
     permission_classes = [IsAuthenticatedOrReadOnly]
 
+    def get_queryset(self):
+        qs = HairSalon.objects.all()
+        city = self.request.query_params.get('city')
+        if city is not None:
+            qs = qs.filter(city__iexact=city)
+        return qs
+
 
 class SalonDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = HairSalon.objects.all()

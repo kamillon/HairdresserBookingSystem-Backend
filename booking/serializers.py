@@ -9,13 +9,13 @@ User = get_user_model()
 class UserCreateSerializer(UserCreateSerializer):
     class Meta(UserCreateSerializer.Meta):
         model = User
-        fields = ['id', 'username', 'first_name', 'last_name', 'email', 'is_staff', 'is_superuser', 'is_employee',
+        fields = ['id', 'username', 'first_name', 'last_name', 'email', 'is_staff', 'is_superuser',
                   'password', 'phone', 'role', 'is_active']
 
 class UserSerializer(UserSerializer):
     class Meta(UserCreateSerializer.Meta):
         model = User
-        fields = ['id', 'username', 'first_name', 'last_name', 'email', 'is_staff', 'is_superuser', 'is_employee',
+        fields = ['id', 'username', 'first_name', 'last_name', 'email', 'is_staff', 'is_superuser',
                   'phone', 'role', 'is_active']
 
 class SalonSerializer(serializers.ModelSerializer):
@@ -34,7 +34,8 @@ class ReservationSerializer(serializers.ModelSerializer):
     class Meta:
         model = Reservation
         fields = ['id', 'customerId', 'salonId', 'serviceId',
-                  'employeeId', 'date', 'start_time', 'end_time', 'is_active']
+                  'employeeId', 'date', 'start_time', 'end_time', 'is_active',
+                  'phone', 'email', 'price']
 
 
 class OpeningHoursSerializer(serializers.ModelSerializer):

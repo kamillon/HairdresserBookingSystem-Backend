@@ -1,5 +1,8 @@
 from django.contrib.auth import get_user_model
+from django.core.mail import send_mail
+from django.conf import settings
 from django.shortcuts import render
+from django.template.loader import render_to_string
 from rest_framework import viewsets
 from rest_framework.exceptions import NotFound
 from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
@@ -68,6 +71,21 @@ class ReservationList(generics.ListCreateAPIView):
     serializer_class = ReservationSerializer
     name = 'reservation-list'
     permission_classes = [IsAuthenticatedOrReadOnly]
+
+    def perform_create(self, serializer):
+        created_object = serializer.save()
+        template = render_to_string('email_template.html', {'reservation': created_object,
+                                                            'salon': created_object.salonId,
+                                                            'employee': created_object.employeeId,
+                                                            'service': created_object.serviceId,
+                                                            'email': settings.EMAIL_HOST_USER})
+        send_mail(
+            'Potwierdzenie rezerwacji nr {}'.format(created_object.id),
+            template,
+            settings.EMAIL_HOST_USER,
+            [created_object.email],
+            fail_silently=False,
+        )
 
 
 class ReservationDetail(generics.RetrieveUpdateDestroyAPIView):

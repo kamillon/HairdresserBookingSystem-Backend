@@ -23,9 +23,8 @@ class User(AbstractUser):
     phone = models.CharField(null=True, max_length=255)
     is_staff = models.BooleanField(null=True)
     is_superuser = models.BooleanField(null=True)
-    is_employee = models.BooleanField(null=True)
     role = models.CharField(choices=USER_TYPE, max_length=20)
-    REQUIRED_FIELDS = ['username', 'first_name', 'last_name', 'phone', 'is_staff', 'is_superuser', 'is_employee', 'role']
+    REQUIRED_FIELDS = ['username', 'first_name', 'last_name', 'phone', 'is_staff', 'is_superuser', 'role']
     USERNAME_FIELD = 'email'
 
     def get_username(self):
@@ -132,12 +131,16 @@ class Reservation(models.Model):
     end_time = models.TimeField(blank=True, null=True, unique=False)
     employeeId = models.ForeignKey(Employee, on_delete=models.CASCADE, related_name='employeeId_reservation')
     is_active = models.BooleanField(default=True)
+    phone = models.CharField(max_length=9)
+    email = models.EmailField(max_length=100)
+    price = models.DecimalField(max_digits=10, decimal_places=2)
 
     def __str__(self):
         return self.id
 
     class Meta:
         verbose_name_plural = "Reservations"
+        unique_together = ('salonId', 'employeeId', 'date', 'start_time')
 
     def __unicode__(self):
         return str(self.data) + " User: " + str(self.customerId)

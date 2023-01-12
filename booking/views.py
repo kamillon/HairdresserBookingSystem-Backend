@@ -228,6 +228,34 @@ class ListOpeningHours(generics.ListAPIView):
             raise NotFound()
 
 
+class ListOfSalonEmployees(generics.ListAPIView):
+    serializer_class = EmployeeSerializer
+    name = 'list-of-salon-employees'
+    permission_classes = [IsAuthenticatedOrReadOnly]
+
+    def get_queryset(self):
+        slug = self.kwargs['pk']
+        queryset = Employee.objects.filter(salon=slug)
+        if queryset:
+            return queryset
+        else:
+            raise NotFound()
+
+
+class ListOfSalonServices(generics.ListAPIView):
+    serializer_class = ServiceSerializer
+    name = 'list-of-salon-services'
+    permission_classes = [IsAuthenticatedOrReadOnly]
+
+    def get_queryset(self):
+        slug = self.kwargs['pk']
+        queryset = Service.objects.filter(salonID=slug)
+        if queryset:
+            return queryset
+        else:
+            raise NotFound()
+
+
 class ApiRoot(generics.GenericAPIView):
     name = 'api-root'
 
@@ -246,4 +274,6 @@ class ApiRoot(generics.GenericAPIView):
                          'employeeWorkHours': "http://127.0.0.1:8000/employee-work-hours/1",
                          'listOfOwnersSalons': "http://127.0.0.1:8000/list-of-owners-salons/1",
                          'listOpeningHours': "http://127.0.0.1:8000/list-opening-hours/1",
+                         'listOfSalonEmployees': "http://127.0.0.1:8000/list-of-salon-employees/1",
+                         'listOfSalonServices': "http://127.0.0.1:8000/list-of-salon-services/1",
                          })

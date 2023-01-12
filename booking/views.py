@@ -49,7 +49,7 @@ class SalonDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = HairSalon.objects.all()
     serializer_class = SalonSerializer
     name = 'salon-details'
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticatedOrReadOnly]
 
 
 class ServiceList(generics.ListCreateAPIView):

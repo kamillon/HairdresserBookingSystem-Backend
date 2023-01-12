@@ -159,8 +159,9 @@ class Reservation(models.Model):
 
     @property
     def is_active(self):
-        now = datetime.now().date()
-        if now > self.date:
+        now = datetime.now()
+        reservation = datetime.combine(self.date, self.start_time)
+        if now > reservation:
             return False
         return True
 

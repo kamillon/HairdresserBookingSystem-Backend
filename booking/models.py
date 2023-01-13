@@ -30,6 +30,9 @@ class User(AbstractUser):
     def get_username(self):
         return self.email
 
+    class Meta:
+        ordering = ['id']
+
 
 class Admin(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='admin', primary_key=True)
@@ -37,6 +40,9 @@ class Admin(models.Model):
 
     def __str__(self):
         return self.user.first_name + " " + self.user.last_name
+
+    class Meta:
+        ordering = ['user']
 
 
 class Customer(models.Model):
@@ -46,6 +52,9 @@ class Customer(models.Model):
     def __str__(self):
         return self.user.first_name + " " + self.user.last_name
 
+    class Meta:
+        ordering = ['user']
+
 
 class SalonOwner(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='salon_owner', primary_key=True)
@@ -54,6 +63,8 @@ class SalonOwner(models.Model):
     def __str__(self):
         return self.user.first_name + " " + self.user.last_name
 
+    class Meta:
+        ordering = ['user']
 
 
 class HairSalon(models.Model):
@@ -72,6 +83,7 @@ class HairSalon(models.Model):
 
     class Meta:
         verbose_name_plural = "HairSalons"
+        ordering = ['id']
 
 
 class Employee(models.Model):
@@ -81,6 +93,9 @@ class Employee(models.Model):
 
     def __str__(self):
         return self.user.first_name + " " + self.user.last_name
+
+    class Meta:
+        ordering = ['user']
 
 
 class OpeningHours(models.Model):
@@ -99,6 +114,9 @@ class OpeningHours(models.Model):
     from_hour = models.TimeField(blank=True, null=True, unique=False)
     to_hour = models.TimeField(blank=True, null=True, unique=False)
     is_closed = models.BooleanField(default=False)
+
+    class Meta:
+        ordering = ['id']
 
 
 class Service(models.Model):
@@ -120,6 +138,7 @@ class Service(models.Model):
 
     class Meta:
         verbose_name_plural = "Services"
+        ordering = ['id']
 
 
 class Reservation(models.Model):
@@ -141,6 +160,7 @@ class Reservation(models.Model):
     class Meta:
         verbose_name_plural = "Reservations"
         unique_together = ('salonId', 'employeeId', 'date', 'start_time')
+        ordering = ['-id']
 
     def __unicode__(self):
         return str(self.data) + " User: " + str(self.customerId)
@@ -183,6 +203,9 @@ class WorkHours(models.Model):
 
     def __str__(self):
         return str(self.id)
+
+    class Meta:
+        ordering = ['id']
 
 
 @receiver(post_save, sender=User)

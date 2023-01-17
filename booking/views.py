@@ -102,6 +102,20 @@ class ReservationAllInformation(generics.ListCreateAPIView):
     permission_classes = [IsAuthenticated]
 
 
+class ListOfSalonReservations(generics.ListAPIView):
+    serializer_class = ReservationAllSerializer
+    name = 'list-of-salon-reservations'
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        slug = self.kwargs['pk']
+        queryset = Reservation.objects.filter(salonId=slug)
+        if queryset:
+            return queryset
+        else:
+            raise NotFound()
+
+
 class OpeningHoursList(generics.ListCreateAPIView):
     queryset = OpeningHours.objects.all()
     serializer_class = OpeningHoursSerializer
@@ -255,6 +269,19 @@ class ListOfSalonServices(generics.ListAPIView):
         else:
             raise NotFound()
 
+class ListOfSalonCustomers(generics.ListAPIView):
+    serializer_class = ListOfSalonCustomers
+    name = 'list-of-salon-customers'
+    permission_classes = [IsAuthenticatedOrReadOnly]
+
+    def get_queryset(self):
+        slug = self.kwargs['pk']
+        queryset = Reservation.objects.filter(salonId=slug).order_by('customerId_id').distinct('customerId_id')
+        if queryset:
+            return queryset
+        else:
+            raise NotFound()
+
 
 class ApiRoot(generics.GenericAPIView):
     name = 'api-root'
@@ -276,4 +303,6 @@ class ApiRoot(generics.GenericAPIView):
                          'listOpeningHours': "http://127.0.0.1:8000/list-opening-hours/1",
                          'listOfSalonEmployees': "http://127.0.0.1:8000/list-of-salon-employees/1",
                          'listOfSalonServices': "http://127.0.0.1:8000/list-of-salon-services/1",
+                         'listOfSalonCustomers': "http://127.0.0.1:8000/list-of-salon-customers/1",
+                         'listOfSalonReservations': "http://127.0.0.1:8000/list-of-salon-reservations/1",
                          })

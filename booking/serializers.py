@@ -136,3 +136,10 @@ class ReservationAllSerializer(serializers.ModelSerializer):
         model = Reservation
         fields = ['id', 'customerId', 'salonId', 'serviceId',
                   'employeeId', 'date', 'start_time', 'end_time', 'is_active']
+
+
+class ListOfSalonCustomers(serializers.ModelSerializer):
+    customerId = CustomerSerializer()
+    class Meta:
+        model = Reservation
+        fields = ['customerId']

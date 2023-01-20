@@ -1,12 +1,9 @@
 from django.contrib.auth import get_user_model
 from django.core.mail import send_mail
-from django.conf import settings
-from django.shortcuts import render
 from django.template.loader import render_to_string
-from rest_framework import viewsets
 from rest_framework.exceptions import NotFound
 from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
-from rest_framework import generics, permissions, status
+from rest_framework import generics
 from .serializers import *
 from .models import *
 from rest_framework.response import Response

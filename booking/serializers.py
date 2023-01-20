@@ -6,17 +6,20 @@ from django.contrib.auth import get_user_model
 
 User = get_user_model()
 
+
 class UserCreateSerializer(UserCreateSerializer):
     class Meta(UserCreateSerializer.Meta):
         model = User
         fields = ['id', 'username', 'first_name', 'last_name', 'email', 'is_staff', 'is_superuser',
                   'password', 'phone', 'role', 'is_active']
 
+
 class UserSerializer(UserSerializer):
     class Meta(UserCreateSerializer.Meta):
         model = User
         fields = ['id', 'username', 'first_name', 'last_name', 'email', 'is_staff', 'is_superuser',
                   'phone', 'role', 'is_active']
+
 
 class SalonSerializer(serializers.ModelSerializer):
     class Meta:
@@ -28,6 +31,7 @@ class ServiceSerializer(serializers.ModelSerializer):
     class Meta:
         model = Service
         fields = '__all__'
+
 
 class ReservationSerializer(serializers.ModelSerializer):
 
@@ -42,8 +46,6 @@ class OpeningHoursSerializer(serializers.ModelSerializer):
     class Meta:
         model = OpeningHours
         fields = '__all__'
-        # validators = []
-        # extra_kwargs = {'od_godziny': {'format': '%H:%M'}}
 
 
 class UserDeleteSerializer(serializers.Serializer):
@@ -64,18 +66,6 @@ class SalonOwnerSerializer(serializers.ModelSerializer):
     class Meta:
         model = SalonOwner
         fields = '__all__'
-
-        # def create(self, validated_data):
-        #     """
-        #     Overriding the default create method of the Model serializer.
-        #     :param validated_data: data containing all the details of student
-        #     :return: returns a successfully created student record
-        #     """
-        #     user_data = validated_data.pop('user')
-        #     user = UserSerializer.create(UserSerializer(), validated_data=user_data)
-        #     salonOwner, created = SalonOwner.objects.update_or_create(user=user,
-        #                                                               salary=validated_data.pop('salary'))
-        #     return salonOwner
 
 
 class EmployeeSerializer(serializers.ModelSerializer):

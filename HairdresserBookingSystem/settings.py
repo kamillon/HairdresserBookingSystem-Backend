@@ -101,7 +101,6 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.TokenAuthentication',
         'rest_framework.authentication.BasicAuthentication',
         'rest_framework.authentication.SessionAuthentication',
-        # 'rest_framework.authentication.TokenAuthentication',
     ),
     'DEFAULT_PERMISSIONS_CLASSES': (
         'rest_framework.permissions.IsAuthenticated',
@@ -136,7 +135,6 @@ DJOSER = {
     'SEND_ACTIVATION_EMAIL': True,
     'SERIALIZERS': {
         'user_create': 'booking.serializers.UserCreateSerializer',
-        # 'user': 'booking.serializers.UserCreateSerializer',
         'user': 'booking.serializers.UserSerializer',
         'user_delete': 'booking.serializers.UserDeleteSerializer',
     },

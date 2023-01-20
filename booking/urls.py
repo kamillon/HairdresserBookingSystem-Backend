@@ -1,15 +1,9 @@
 from django.urls import path, include
 from . import views
 from django.contrib import admin
-from rest_framework import routers
-
-# router = routers.DefaultRouter()
-# router.register(r'booking', views.UserView, 'booking')
 
 admin.site.site_url = 'http://127.0.0.1:8000/'
 urlpatterns = [
-
-    # path('api/', include(router.urls)),
     path('user/', views.UserList.as_view(), name='user-list'),
     path('user/<int:pk>/', views.UserDetail.as_view(), name='user-details'),
     path('salon/', views.SalonList.as_view(), name='salon-list'),

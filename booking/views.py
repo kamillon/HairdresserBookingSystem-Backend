@@ -77,6 +77,7 @@ class ReservationList(generics.ListCreateAPIView):
         template = render_to_string('email_template.html', {'reservation': created_object,
                                                             'salon': created_object.salonId,
                                                             'employee': created_object.employeeId,
+                                                            'customer': created_object.customerId,
                                                             'service': created_object.serviceId,
                                                             'email': settings.EMAIL_HOST_USER})
         send_mail(
@@ -84,6 +85,7 @@ class ReservationList(generics.ListCreateAPIView):
             template,
             settings.EMAIL_HOST_USER,
             [created_object.email],
+            html_message=template,
             fail_silently=False,
         )
 

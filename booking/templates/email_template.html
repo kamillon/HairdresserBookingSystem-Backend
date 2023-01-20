@@ -1,15 +1,58 @@
-Dziękujemy za dokonanie rezerwacji na IBOOKING
-
-Dane twojej rezerwacji:
-Salon: {{salon.name}}
-Tel.: {{salon.phone_number}}
-Termin: {{reservation.date}}, godz. {{reservation.start_time}}
-Usługa: {{service.name}}
-Cena: {{service.price}} zł
-Pracownik: {{employee.user.first_name}} {{employee.user.last_name}}
-
-
-Jeśli masz jakieś pytania, napisz do nas
-{{email}}
-
-Salonfy
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <title>Local Library</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+<div>
+    <h4>Witaj {{customer.user.first_name}},</h4>
+    <p>Dziękujemy za dokonanie rezerwacji. Poniżej znajdują się szczegóły.</p>
+    <div>
+        <table>
+            <tr>
+                <th colspan="2" style="text-align:left">Szczegóły rezerwacji:</th>
+            </tr>
+            <tr>
+                <td>Termin wizyty:</td>
+                <td><b>{{reservation.date}}, godz. {{reservation.start_time}}</b></td>
+            </tr>
+            <tr>
+                <td>Usługa:</td>
+                <td><b>{{service.name}}</b></td>
+            </tr>
+            <tr>
+                <td>Cena:</td>
+                <td> {{service.price}} zł</td>
+            </tr>
+            <tr>
+                <td rowspan="3" style="vertical-align:top">Salon:</td>
+                <td> {{salon.name}}</td>
+            </tr>
+            <tr>
+                <td> {{salon.city}}, ul. {{salon.street}} {{salon.house_number}}</td>
+            </tr>
+            <tr>
+                <td> {{salon.post_code}} {{salon.postal_code_locality}}</td>
+            </tr>
+            <tr>
+                <td>Tel.:</td>
+                <td>{{salon.phone_number}}</td>
+            </tr>
+            <tr>
+                <td>Pracownik:</td>
+                <td>{{employee.user.first_name}} {{employee.user.last_name}}</td>
+            </tr>
+        </table>
+    </div>
+    <br>
+    <div>
+        Jeśli masz jakieś pytania, napisz do nas:<br>
+        {{email}}
+        <br><br>
+        Salonfy
+    </div>
+</div>
+</body>
+</html>

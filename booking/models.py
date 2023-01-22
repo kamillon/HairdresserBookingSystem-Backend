@@ -20,7 +20,7 @@ class User(AbstractUser):
     ]
 
     email = models.EmailField(verbose_name='email', max_length=255, unique=True)
-    phone = models.CharField(null=True, max_length=255)
+    phone = models.CharField(null=True, max_length=9)
     is_staff = models.BooleanField(null=True)
     is_superuser = models.BooleanField(null=True)
     role = models.CharField(choices=USER_TYPE, max_length=20)
@@ -69,7 +69,7 @@ class HairSalon(models.Model):
     city = models.CharField(max_length=100, blank=False, null=False)
     street = models.CharField(max_length=100, unique=False)
     house_number = models.CharField(max_length=5, unique=False)
-    post_code = models.CharField(max_length=20, blank=True, null=True)
+    post_code = models.CharField(max_length=6, blank=True, null=True)
     postal_code_locality = models.CharField(max_length=100, blank=True, null=True)
     phone_number = models.CharField(max_length=9, unique=True)
     email = models.EmailField(max_length=100, unique=True)
@@ -199,8 +199,6 @@ def create_user_profile(sender, instance, created, **kwargs):
             Admin.objects.create(user=instance)
         elif instance.role == 'salon_owner':
             SalonOwner.objects.create(user=instance)
-        # elif instance.role == 'employee':
-        #     Employee.objects.create(user=instance)
         elif instance.role == 'customer':
             Customer.objects.create(user=instance)
 

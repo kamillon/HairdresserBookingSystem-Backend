@@ -1,2 +1,3 @@
-#HairdresserBookingSystem
-Aplikacja webowa wspomagająca rezerwację wizyt w salonie fryzjerskim
+# System rezerwacji dla salonów fryzjerskich
+
+Repozytorium zawiera kod źródłowy backendu aplikacji

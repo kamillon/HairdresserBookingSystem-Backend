@@ -41,6 +41,17 @@ python manage.py runserver
 ```
 Żeby sprawdzić czy serwer Django działa nalezy wejść na adres: `https://localhost:8000`
 
+## Screenshots
+![Strona glowna](https://github.com/kamillon/HBS-Frontend/blob/master/screenshots/strona_glowna.png)
+
+![Strona fryzjer](https://github.com/kamillon/HBS-Frontend/blob/master/screenshots/strona_fryzjer.png)
+
+![Strona salonu](https://github.com/kamillon/HBS-Frontend/blob/master/screenshots/strona_salonu.png)
+
+![Ekran rezerwacji](https://github.com/kamillon/HBS-Frontend/blob/master/screenshots/ekran_rezerwacji.png)
+
+![Panel pracownika](https://github.com/kamillon/HBS-Frontend/blob/master/screenshots/panel_pracownika_rezerwacje.png)
+
 ## Funkcjonalności
 - logowanie i rejestracja w systemie nowych użytkowników,
 - możliwość rezerwacji wizyty poprzez stronę internetową,
